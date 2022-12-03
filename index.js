@@ -28,11 +28,27 @@ app.post('/user/post', (req, res) => {
     const sql = `INSERT INTO users (name,address,phone) VALUES ('${name}', '${address}', '${phone}')`
 
     db.query(sql, (err, data) => {
-        console.log(data);
+        if (err) respone(500, "invalid", "name already taken", res)
+        if (data?.affectedRows) respone(200, "Succes", "data Succesfuly added", res);
     })
+})
 
-    respone(200, "oke", "data successfuly", res)
 
+app.put('/user/put', (req, res) => {
+
+    const { id, name, address, phone } = req.body
+    const sql = `UPDATE users SET name = '${name}', address ='${address}', phone= '${phone}' WHERE id=${id}`
+
+    db.query(sql, (err, data) => {
+        if (err) respone(500, "invalid", "data is invalid", res)
+        if (data?.affectedRows) {
+            const format = {
+                isSucces: data.affectedRows,
+                message: data.message,
+            }
+            respone(200, format, "succesfully updated", res)
+        }
+    })
 })
 
 app.listen(port, () => {
