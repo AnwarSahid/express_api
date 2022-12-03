@@ -46,7 +46,26 @@ app.put('/user/put', (req, res) => {
                 isSucces: data.affectedRows,
                 message: data.message,
             }
-            respone(200, format, "succesfully updated", res)
+            respone(200, format, "successfuly", res)
+        } else {
+            respone(500, "eror", "user not found", res)
+        }
+    })
+})
+
+app.delete('/user/delete', (req, res) => {
+    const { id } = req.body
+    const sql = `DELETE FROM users WHERE id= ${id}`
+    db.query(sql, (err, data) => {
+        if (err) respone(500, "invalid", "error ngab", res)
+        if (data?.affectedRows) {
+            const format = {
+                isSucces: data.affectedRows,
+                message: data.message,
+            }
+            respone(200, format, "successfuly deleted", res)
+        } else {
+            respone(500, "eror", "user not found", res)
         }
     })
 })
